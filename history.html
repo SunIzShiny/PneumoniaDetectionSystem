@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+
+<nav class="navbar navbar-glass">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}">Dashboard</a>
+        <div class="ms-auto">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-gradient me-2">Back</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-gradient">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero-container mt-4">
+
+    
+    <div class="main-card p-4" style="max-width: 1200px; width: 95%; margin: 0 auto;">
+        <h2 class="mb-4 text-center">Your Upload History</h2>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-light rounded text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="padding: 1rem;">Patient Name</th>
+                        <th style="padding: 1rem;">Patient ID</th>
+                        <th style="padding: 1rem;">DOB</th>
+                        <th style="padding: 1rem;">Prediction</th>
+                        <th style="padding: 1rem;">Image</th>
+                        <th style="padding: 1rem;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                        <tr>
+                            <td style="padding: 0.75rem;">{{ record.patient_name }}</td>
+                            <td style="padding: 0.75rem;">{{ record.patient_id }}</td>
+                            <td style="padding: 0.75rem;">{{ record.dob }}</td>
+                            <td style="padding: 0.75rem;">{{ record.label if record.label else 'N/A' }}</td>
+                            <td style="padding: 0.75rem;">
+                                <img src="{{ url_for('display_image', filename=record.image_path) }}" 
+                                     style="width:100px; border-radius:8px;">
+                            </td>
+                            <td style="padding: 0.5rem;">
+                                <a href="{{ url_for('delete_history', record_id=record.id) }}" 
+                                   class="btn btn-gradient btn-sm w-100"
+                                   onclick="return confirm('Are you sure you want to delete this record?');">
+                                   Delete
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.transition = "opacity 0.5s";
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500);
+            }, 3000); 
+        });
+    });
+</script>
+
+</body>
+</html>
